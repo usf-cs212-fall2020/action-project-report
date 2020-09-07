@@ -1,0 +1,27 @@
+name: 'Generate Project Reports'
+description: 'Github Action to generate the project test reports.'
+
+inputs:
+  main_path:
+    required: true
+
+outputs:
+  path1:
+    value: ${{ steps.make-reports.outputs.path1 }}
+  path2:
+    value: ${{ steps.make-reports.outputs.path2 }}
+
+runs:
+  using: "composite"
+  steps:
+  - name: Generate Test Reports
+    id: make-reports
+    shell: bash
+    working-directory: ${{ inputs.main_path }}
+    run: |
+      echo "Generating Reports..."
+      mvn -ntp surefire-report:report-only
+      mvn -ntp site -DgenerateReports=false
+
+      echo "::set-output name=path1::$(pwd)/target/site"
+      echo "::set-output name=path2::$(pwd)/target/surefire-reports"
