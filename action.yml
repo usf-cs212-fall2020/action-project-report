@@ -22,6 +22,9 @@ runs:
       echo "Generating Reports..."
       mvn -ntp surefire-report:report-only
       mvn -ntp site -DgenerateReports=false
+      
+      echo "Compressing actual output files..."
+      zip -r target/site/actual.zip actual
 
       echo "::set-output name=path1::$(pwd)/target/site"
       echo "::set-output name=path2::$(pwd)/target/surefire-reports"
